@@ -2,7 +2,7 @@ require('dotenv').config();
 const DRIFT_AUTH_TOKEN = process.env.DRIFT_AUTH_TOKEN;
 const axios = require('axios');
 
-const getDriftAgents = async () => {
+const getChatAgents = async () => {
   const baseUrl = 'https://driftapiqa.com/users/list';
   const headers = {
       'Authorization': `Bearer ${DRIFT_AUTH_TOKEN}`,
@@ -31,11 +31,11 @@ const getDriftAgents = async () => {
 
 
 
-module.exports = getDriftAgents;
+module.exports = getChatAgents;
 
 // for testing 
 // (async ()=> {
-//   let result = await getDriftAgents({data:{participants:['2257252','2290384']}});
+//   let result = await getChatAgents({data:{participants:['2257252','2290384']}});
 
 //   console.log(result);
 // })();
