@@ -2,7 +2,7 @@ require('dotenv').config()
 const DRIFT_AUTH_TOKEN = process.env.DRIFT_AUTH_TOKEN
 const _ = require('lodash');
 const axios = require('axios');
-const baseUrl = 'https://driftapiqa.com/conversations/';
+const baseUrl = 'https://driftapi.com/conversations/';
 
 const headers = {
     'Authorization': `Bearer ${DRIFT_AUTH_TOKEN}`,

@@ -15,7 +15,19 @@ const csvWriter = createCsvWriter({
 });
 
 const csvCreate = async (interactions) => {
-  const body = JSON.stringify(interactions);
+  const body = (interactions);
+
+  // const body = JSON.stringify(interactions);
+  // debugger
+  // const body = [
+  //   {
+  //     convo_id: '7058',
+  //     assignee_id: 'Sravan Kumar Gottumukkala',
+  //     comments: 22
+  //   }
+      
+  // ];
+
 
   return csvWriter
     .writeRecords(body)

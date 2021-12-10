@@ -1,0 +1,2 @@
+convo_id,assignee_id,link_to_full_conversation,company_name,updatedat_date,createdat_date,participant,total_messages
+3344071267,Error retrieving participant(s),https://app.drift.com/conversations/3344071267,null,2021-12-10T22:21:50Z,2021-12-10T22:21:00Z,Error retrieving participant(s),"[object Object],[object Object]"

@@ -3,7 +3,7 @@ const DRIFT_AUTH_TOKEN = process.env.DRIFT_AUTH_TOKEN;
 const axios = require('axios');
 
 const getChatAgents = async () => {
-  const baseUrl = 'https://driftapiqa.com/users/list';
+  const baseUrl = 'https://driftapi.com/users/list';
   const headers = {
       'Authorization': `Bearer ${DRIFT_AUTH_TOKEN}`,
       'Content-Type': 'application/json'
