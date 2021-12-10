@@ -1,8 +1,8 @@
 const he = require('he'); //formats html encoded text to human readable
 
-const pvMessagesBuilder = (agents, contactAttributes, messages) => {
+const messagesBuilder = (agents, contactAttributes, messages) => {
 
-  let interactionMessages = [];
+  let convoMessages = [];
   let msgArray = messages.data.messages;
   let tags = {};
   
@@ -11,22 +11,23 @@ const pvMessagesBuilder = (agents, contactAttributes, messages) => {
 
     let type = typeSetter(msgArray[i]);
     let author = authorSetter(msgArray[i], type, contactAttributes, agents);
-    interactionMessages.push({
+    convoMessages.push({
       body: he.decode(body),
       type: type,
       added_at: new Date(msgArray[i].createdAt).toISOString().slice(0,-5)+"Z",
       author_id: author
     })
 
-    //gather any interaction tags
-    if(type == 'internal_note'){
-      tags = parser.tagParser(body);
-    }
+    //gather any convo tags
+    // if(type == 'internal_note'){
+    //   tags = parser.tagParser(body);
+    // }
   }
 
   //if multiple values are assigned to a top level tagDropper tag, only the last value will be returned
-  return {"comments": interactionMessages,
-          "tags": tags};
+  return {"comments": convoMessages,
+          //"tags": tags
+        };
 }
 
 const authorSetter = (msg, type, attributes, agents) => {
@@ -67,14 +68,14 @@ const authorSetter = (msg, type, attributes, agents) => {
 }
 
 const typeSetter = (msg) =>{
-  let pvType = 'customer_comment';
+  let convoType = 'customer_comment';
 
   if (msg.type == 'private_note'){
-    pvType = 'internal_note';
+    convoType = 'internal_note';
   } else if (msg.author.type == 'user') {
-    pvType = 'agent_comment';
+    convoType = 'agent_comment';
   } 
-  return pvType;
+  return convoType;
 }
 
-module.exports = pvMessagesBuilder;
+module.exports = messagesBuilder;

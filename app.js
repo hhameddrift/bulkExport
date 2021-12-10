@@ -4,6 +4,7 @@ const convoReporter = require("./Drift/listConvoIds");
 const getConvo = require("./Drift/getConversation");
 const getChatAgents = require("./Drift/getChatAgents.js");
 const csvCreate = require("./CSVWriter/csvCreate.js");
+const messagesBuilder = require("./Drift/messagesBuilder.js");
 
 const getConvoMessages = require("./Drift/getMessages");
 
@@ -31,6 +32,8 @@ console.time();
 
     if(convoObject !== "Error"){
       const driftMessages = await getConvoMessages(convoId.conversationId);
+      const convoMessages = messagesBuilder(driftAgents,contactAttributes,driftMessages); //returns an array of PV message objects
+
       const convoParticipants = participants.getParticipants(convoObject, chatAgents);
       
       //Fields that can be added to the CSV file
@@ -66,7 +69,6 @@ console.time();
     
     if (bulkExportResponse !== "Error"){
       console.log("Bulk convo export error. Check your code" )
-      // console.log("Bulk convo job id: " + bulkExportResponse);
     }
     loopsNeeded--;
   }
@@ -76,49 +78,3 @@ console.time();
   console.log("Total time to execute: ");
   console.timeEnd();
 })();
-
-
-
-// Import csv-writer
-import csvwriter from 'csv-writer'
-
-var createCsvWriter = csvwriter.createObjectCsvWriter
-
-// Passing the column names intp the module
-const csvWriter = createCsvWriter({
-
-// Output csv file name is geek_data
-path: 'geek_data.csv',
-header: [
-
-	// Title of the columns (column_names)
-	{id: 'id', title: 'ID'},
-	{id: 'name', title: 'NAME'},
-	{id: 'age', title: 'AGE'},
-]
-});
-
-// Values for each column through an array
-const results = [
-{
-	id: '7058',
-	name: 'Sravan Kumar Gottumukkala',
-	age: 22
-}, {
-	id: '7004',
-	name: 'Sudheer',
-	age: 29
-}, {
-	id: '7059',
-	name: 'Radha',
-	age: 45
-},{
-	id: '7060',
-	name: 'vani',
-	age: 34
-}
-	
-];
-// Writerecords function to add records
-csvWriter.writeRecords(results)
-.then(()=> console.log('Data uploaded into csv successfully'));
