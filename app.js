@@ -7,9 +7,9 @@ require("dotenv").config();
 const DRIFT_AUTH_TOKEN = process.env.DRIFT_AUTH_TOKEN; // oAuth token generated when creating an app within dev.drift.com
 const convoReporter = require("./Drift/listConvoIds"); // Hit report endpoint to collect conversationId
 const getConvo = require("./Drift/getConversation"); // Hit conversation endpoint to get more detailed information about a particular conversation.
-const getScript = require("./Drift/getTranscript");
-const getChatAgents = require("./Drift/getChatAgents.js");
-const csvCreate = require("./CSVWriter/csvCreate.js");
+const getScript = require("./Drift/getTranscript"); // The response object will be a formatted string of the entire transcript
+const getChatAgents = require("./Drift/getChatAgents.js"); //To list users in your org
+const csvCreate = require("./CSVWriter/csvCreate.js"); // Writes objects/arrays into a CSV string into a file
 const messagesBuilder = require("./Drift/messagesBuilder.js");
 const getAttributes = require("./Drift/getContactAttributes.js");
 const participants = require("./Drift/getParticipants.js");

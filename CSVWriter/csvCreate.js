@@ -1,9 +1,14 @@
+// Documentations - https://www.npmjs.com/package/csv-writer
+//Writes objects/arrays into a CSV string into a file.
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
-const date = new Date()
+const date = new Date(); // Set time to differentiate exported file's name
 
 const csvWriter = createCsvWriter({
-  path: "./ExportFiles/"+"DriftCSV-"+date+".csv",
+  path: "./ExportFiles/" + "DriftCSV-" + date + ".csv",
+
+  //Array of objects (id and title properties) or strings (field IDs).
+  //A header line will be written to the file only if given as an array of objects.
   header: [
     { id: "convo_id", title: "convo_id" },
     { id: "assignee_id", title: "assignee_id" },
@@ -18,10 +23,8 @@ const csvWriter = createCsvWriter({
 });
 
 const csvCreate = async (interactions) => {
-  const body = (interactions);
-
-
-
+  const body = interactions;
+// Write collected data into the CSV file
   return csvWriter
     .writeRecords(body)
     .then(() => console.log("Data uploaded into csv successfully"))

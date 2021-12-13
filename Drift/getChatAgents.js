@@ -11,6 +11,7 @@ const getChatAgents = async () => {
 
   let agentsHash = {};
 
+  //No pagination present on this query - this will return the full list of users (you can expose the full user model metadata)
   return axios
       .get(baseUrl, {headers: headers})
       .then((res) => {
