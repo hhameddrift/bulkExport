@@ -10,8 +10,8 @@ const getConvo = require("./Drift/getConversation"); // Hit conversation endpoin
 const getScript = require("./Drift/getTranscript"); // The response object will be a formatted string of the entire transcript
 const getChatAgents = require("./Drift/getChatAgents.js"); //To list users in your org
 const csvCreate = require("./CSVWriter/csvCreate.js"); // Writes objects/arrays into a CSV string into a file
-const messagesBuilder = require("./Drift/messagesBuilder.js");
-const getAttributes = require("./Drift/getContactAttributes.js");
+const messagesBuilder = require("./Drift/messagesBuilder.js"); // optional to include for detailed messages in conversation
+const getAttributes = require("./Drift/getContactAttributes.js"); // Retrieve Contacts' attributes
 const participants = require("./Drift/getParticipants.js");
 const getConvoMessages = require("./Drift/getMessages");
 

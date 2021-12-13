@@ -1,4 +1,5 @@
-const he = require('he'); //formats html encoded text to human readable
+//This funcstion is options if you prefer to collect detailed message object than just a transcript as in getTranscript.js
+const he = require('he'); //formats html encoded text to human readable - https://www.npmjs.com/package/he
 
 const messagesBuilder = (agents, contactAttributes, messages) => {
 
