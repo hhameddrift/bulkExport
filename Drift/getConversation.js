@@ -7,11 +7,13 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+// Use this endpoint to get more detailed information about a particular conversation, such as participant ids, tags, related playbooks, etc.,
+
 const getConversation = async (conversationId) => {
   return axios
     .get(baseUrl + conversationId, { headers: headers })
     .then((res) => {
-      let convoObject = res.data;
+      let convoObject = res.data; // Store conversation object
       return convoObject;
     })
     .catch((err) => {

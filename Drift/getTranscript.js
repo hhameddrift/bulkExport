@@ -7,11 +7,13 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+// Returns the formatted transcript of the Conversation with id equal to the given conversationId as a string object.
+  // Requires conversation_read scope in your authorized app - https://dev.drift.com/apps.
 const getTranscript = async (conversationId) => {
   return axios
     .get(baseUrl + conversationId + "/transcript", { headers: headers })
     .then((res) => {
-      let transcript = (res.data) ;
+      let transcript = res.data // The response object will be a formatted string of the entire transcript 
       
       return transcript;
     })
