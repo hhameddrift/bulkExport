@@ -1,6 +1,11 @@
+// Main app.js will loop through all the pages of the list conversations endpoint with a certain time range to obtain all the conversation ID's. 
+//Then loop a job that retrieves each individual conversation, related chat agent, attributes, transcript.
+//You can grab the conversation object as a JSON or download the transcript as a string.
+
+
 require("dotenv").config();
-const DRIFT_AUTH_TOKEN = process.env.DRIFT_AUTH_TOKEN;
-const convoReporter = require("./Drift/listConvoIds");
+const DRIFT_AUTH_TOKEN = process.env.DRIFT_AUTH_TOKEN; // oAuth token generated when creating an app within dev.drift.com
+const convoReporter = require("./Drift/listConvoIds"); // Hit report endpoint to collect conversationId
 const getConvo = require("./Drift/getConversation");
 const getScript = require("./Drift/getTranscript");
 const getChatAgents = require("./Drift/getChatAgents.js");
