@@ -2,12 +2,12 @@ require("dotenv").config();
 const DRIFT_AUTH_TOKEN = process.env.DRIFT_AUTH_TOKEN;
 const convoReporter = require("./Drift/listConvoIds");
 const getConvo = require("./Drift/getConversation");
+const getScript = require("./Drift/getTranscript");
 const getChatAgents = require("./Drift/getChatAgents.js");
 const csvCreate = require("./CSVWriter/csvCreate.js");
 const messagesBuilder = require("./Drift/messagesBuilder.js");
 const getAttributes = require("./Drift/getContactAttributes.js");
 const participants = require("./Drift/getParticipants.js");
-
 const getConvoMessages = require("./Drift/getMessages");
 
 console.time();
@@ -30,6 +30,8 @@ console.time();
 
   for (const convoId of convoList) {
     const convoObject = await getConvo.getConversation(convoId.conversationId);
+    const transcriptObject = await getScript.getTranscript(convoId.conversationId);
+
 
     if (convoObject !== "Error") {
 
@@ -37,11 +39,14 @@ console.time();
  
       const driftMessages = await getConvoMessages(convoId.conversationId);
 
+      const conversationTranscript = transcriptObject
+
 
       const convoMessages = messagesBuilder(
         chatAgents,
         contactAttributes,
-        driftMessages
+        driftMessages,
+        conversationTranscript
       ); 
       const companyName = contactAttributes.employment_name || "null";
 
@@ -70,6 +75,7 @@ console.time();
         num_bot_messages: convoId.metrics[5],
         num_end_user_messages: convoId.metrics[6],
         comments: convoMessages.comments,
+        transcriptObject: conversationTranscript
       };
 
       let convo = { ...convoBase, ...convoMessages.tags };
@@ -77,7 +83,8 @@ console.time();
       convosArray.push(convo);
     }
   }
-
+  // console.log(convosArray)
+  // debugger
   console.log(`Total convos to send to CSV File: ${convosArray.length}`);
 
   //submit convos-create-bulk job in batches of 100 convos

@@ -1,7 +1,9 @@
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
+const date = new Date()
+
 const csvWriter = createCsvWriter({
-  path: "ExportFiles.csv",
+  path: "./ExportFiles/"+"DriftCSV-"+date+".csv",
   header: [
     { id: "convo_id", title: "convo_id" },
     { id: "assignee_id", title: "assignee_id" },
@@ -10,23 +12,15 @@ const csvWriter = createCsvWriter({
     { id: "updatedat_date", title: "updatedat_date" },
     { id: "createdat_date", title: "createdat_date" },
     { id: "participant", title: "participant" },
-    { id: "comments", title: "total_messages" },
+    { id: "transcriptObject", title: "transcriptObject" },
+    { id: "total_messages", title: "total_messages" },
   ],
 });
 
 const csvCreate = async (interactions) => {
   const body = (interactions);
-
-  // const body = JSON.stringify(interactions);
-  // debugger
-  // const body = [
-  //   {
-  //     convo_id: '7058',
-  //     assignee_id: 'Sravan Kumar Gottumukkala',
-  //     comments: 22
-  //   }
-      
-  // ];
+console.log(typeof body)
+// debugger
 
 
   return csvWriter
