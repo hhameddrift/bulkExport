@@ -19,8 +19,7 @@ const csvWriter = createCsvWriter({
 
 const csvCreate = async (interactions) => {
   const body = (interactions);
-console.log(typeof body)
-// debugger
+
 
 
   return csvWriter

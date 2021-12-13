@@ -11,7 +11,7 @@ const getTranscript = async (conversationId) => {
   return axios
     .get(baseUrl + conversationId + "/transcript", { headers: headers })
     .then((res) => {
-      let transcript = JSON.stringify(res.data) ;
+      let transcript = (res.data) ;
       
       return transcript;
     })
