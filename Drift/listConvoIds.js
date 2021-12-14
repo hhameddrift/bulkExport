@@ -35,7 +35,7 @@ const data = JSON.stringify({
 
         //now-(1000*60*60*24*10),  //ensure this aligns with timer settings to run app.js
        // now
-        "2021-11-01",
+        "2021-09-01",
         "2021-12-10"
       ]
     }
