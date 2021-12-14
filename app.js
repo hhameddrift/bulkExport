@@ -98,7 +98,7 @@ console.time();
   while (loopsNeeded > 0) {
     const bulkExportResponse = await csvCreate(convosArray.splice(0, 100));
 
-    if (bulkExportResponse !== "Error") {
+    if (bulkExportResponse == "Error") {
       console.log("Bulk convo export error. Check your code");
     }
     loopsNeeded--;
