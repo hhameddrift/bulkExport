@@ -1,4 +1,4 @@
-
+// Function to query participants to match with chat agent
 const getParticipants = (convoObj, driftAgents) => {
 
   if (!convoObj.data.participants  || convoObj.data.participants.length == 0){
@@ -11,7 +11,7 @@ const getParticipants = (convoObj, driftAgents) => {
 
   convoObj.data.participants.forEach(id => {
     if(driftAgents[id]){
-      participants.push(driftAgents[id].email.toLowerCase());
+      participants.push(driftAgents[id].email.toLowerCase()); // push participants to lower case to avoid any mismatch
     } else {
       participants.push("Unknown Participant")
     }

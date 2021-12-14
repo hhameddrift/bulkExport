@@ -10,11 +10,12 @@ const getConvo = require("./Drift/getConversation"); // Hit conversation endpoin
 const getScript = require("./Drift/getTranscript"); // The response object will be a formatted string of the entire transcript
 const getChatAgents = require("./Drift/getChatAgents.js"); //To list users in your org
 const csvCreate = require("./CSVWriter/csvCreate.js"); // Writes objects/arrays into a CSV string into a file
-const messagesBuilder = require("./Drift/messagesBuilder.js"); // optional to include for detailed messages in conversation
+const messagesBuilder = require("./Drift/messagesBuilder.js"); // Optional to include for detailed messages in conversation
 const getAttributes = require("./Drift/getContactAttributes.js"); // Retrieve Contacts' attributes
-const participants = require("./Drift/getParticipants.js");
-const getConvoMessages = require("./Drift/getMessages");
+const participants = require("./Drift/getParticipants.js"); // Retrieve participants
+const getConvoMessages = require("./Drift/getMessages"); // Optional to retrieve messages for conversation id rather than transcripts
 
+// Count for total time it took to execute
 console.time();
 
 (async () => {
@@ -33,6 +34,7 @@ console.time();
 
   let convosArray = [];
 
+  // Loop through the conversation list to store conversation objects/transcripts
   for (const convoId of convoList) {
     const convoObject = await getConvo.getConversation(convoId.conversationId);
     const transcriptObject = await getScript.getTranscript(convoId.conversationId);
@@ -40,59 +42,57 @@ console.time();
 
     if (convoObject !== "Error") {
 
-      const contactAttributes = await getAttributes(convoObject.data.contactId); // calls drift contact API to get attributes
+      const contactAttributes = await getAttributes(convoObject.data.contactId); // Calls drift contact API to get attributes
  
-      const driftMessages = await getConvoMessages(convoId.conversationId);
+      const driftMessages = await getConvoMessages(convoId.conversationId); // Optional to retrieve messages for conversation id rather than transcripts
 
-      const conversationTranscript = transcriptObject
+      const conversationTranscript = transcriptObject // Store transcript object
 
-
+      // Messages Builder if transcript is not enough
       const convoMessages = messagesBuilder(
         chatAgents,
         contactAttributes,
         driftMessages,
         conversationTranscript
       ); 
+
+        // Collects employment_name attribute values
       const companyName = contactAttributes.employment_name || "null";
 
-      //returns an array of convo message objects
-
+      //Returns list of participants of the conversation object
       const convoParticipants = participants.getParticipants(
         convoObject,
         chatAgents
       );
 
-      //Fields that can be added to the CSV file
+      //Fields that will be added to the CSV file
       let convoBase = {
-        convo_id: convoId.conversationId.toString(),
-        assignee_id: convoParticipants[0], //this will set the convo owner to the first agent to join the conversation
-        link_to_full_conversation:
-          "https://app.drift.com/conversations/" + convoId.conversationId,
-        company_name: companyName,
-        updatedat_date:
-          new Date(convoObject.data.updatedAt).toISOString().slice(0, -5) + "Z",
-        createdat_date:
-          new Date(convoObject.data.createdAt).toISOString().slice(0, -5) + "Z",
-        status: convoObject.data.status,
-        participant: convoParticipants.join(", "),
-        total_messages: convoId.metrics.slice(4, 7).reduce((a, b) => a + b),
-        num_agent_messages: convoId.metrics[4],
-        num_bot_messages: convoId.metrics[5],
-        num_end_user_messages: convoId.metrics[6],
-        comments: convoMessages.comments,
-        transcriptObject: conversationTranscript
+        convo_id: convoId.conversationId.toString(), // conversation ID
+        assignee_id: convoParticipants[0], //This locate the the first agent to join the conversation
+        link_to_full_conversation:"https://app.drift.com/conversations/" + convoId.conversationId, // conversation link in app.drift.com
+        company_name: companyName, //employment_name attribute values
+        updatedat_date:new Date(convoObject.data.updatedAt).toISOString().slice(0, -5) + "Z", // Stores updatedat_date
+        createdat_date:new Date(convoObject.data.createdAt).toISOString().slice(0, -5) + "Z", // Stores createdat_date
+        status: convoObject.data.status, // Conversation's Status
+        participant: convoParticipants.join(", "), // Converation's participant
+        total_messages: convoId.metrics.slice(4, 7).reduce((a, b) => a + b), // Total messages in conversation
+        num_agent_messages: convoId.metrics[4], // Stores num_agent_messages
+        num_bot_messages: convoId.metrics[5], // Stores num_bot_messages
+        num_end_user_messages: convoId.metrics[6], // Stores num_end_user_messages
+        comments: convoMessages.comments, // Stores in internal comments
+        transcriptObject: conversationTranscript // Stores transcriptObject
       };
 
+      // Combines conversations data + tags 
       let convo = { ...convoBase, ...convoMessages.tags };
       console.log("convo id " + convo.convo_id + " created.");
       convosArray.push(convo);
     }
   }
-  // console.log(convosArray)
-  // debugger
+
   console.log(`Total convos to send to CSV File: ${convosArray.length}`);
 
-  //submit convos-create-bulk job in batches of 100 convos
+  //submit convos-create-bulk job in batches of 100 convos - It can be modified to lower or higher number of total conversations
   let loopsNeeded = Math.ceil(convosArray.length / 100);
   let totalErrors = 0;
   while (loopsNeeded > 0) {

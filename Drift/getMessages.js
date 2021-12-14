@@ -1,3 +1,4 @@
+// Optional to retrieve messages for conversation id rather than transcripts
 require('dotenv').config()
 const DRIFT_AUTH_TOKEN = process.env.DRIFT_AUTH_TOKEN
 const _ = require('lodash');
@@ -9,7 +10,7 @@ const headers = {
     'Content-Type': 'application/json'
 }
 
-//directly from lodash documentation used with .mergeWith method
+//directly from lodash documentation used with .mergeWith method - https://lodash.com/docs#mergeWith
 function customizer(objValue, srcValue) {
   if (_.isArray(objValue)) {
       return objValue.concat(srcValue);
@@ -47,10 +48,3 @@ const getConvoMessages = async (convoId, data, pagination) => {
 }
 
 module.exports = getConvoMessages;
-
-// for testing 
-// (async ()=> {
-//   let result = await getConvoMessages("3228826406");
-
-//   console.log(result);
-// })();
